@@ -1,56 +1,79 @@
-# 🎓 Student Academic Outcome Prediction
+# Student Academic Outcome Prediction
 
-## 1. Problem Statement
+An AI/ML project that predicts a student's academic outcome at enrollment time as:
 
-This project predicts a student's final academic outcome as:
+- **Dropout**
+- **Enrolled**
+- **Graduate**
 
-- Dropout
-- Enrolled
-- Graduate
+The project uses machine learning with a leakage-safe preprocessing and evaluation pipeline based on the UCI Student Performance dataset.
 
-using information available at the time of student enrollment.
+---
 
-This is a multiclass classification problem.
+## 🚀 Live Demo
 
-## 2. Dataset
+🔗 **[Try the Deployed Student Academic Outcome Prediction App](https://student-academic-outcome-prediction-app-url.streamlit.app/)**
 
-Dataset:
-UCI Machine Learning Repository - Predict Students' Dropout and Academic Success
+The application is deployed using **Streamlit Community Cloud**.
 
-Dataset ID: 697
+Evaluators can directly open the link, enter student information available at enrollment time, and obtain a predicted academic outcome along with prediction probabilities.
 
-The supplied dataset contains 4,424 student records.
+---
 
-The dataset is semicolon-delimited.
+## 📌 Project Objective
 
-## 3. Technologies
+The objective of this project is to predict whether a student will:
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Matplotlib
-- Seaborn
-- Streamlit
-- Joblib
+1. Dropout
+2. Remain Enrolled
+3. Graduate
 
-## 4. Data Preparation
+using only information that would be available **at the time of student enrollment**.
 
-The dataset was inspected for:
+This makes the prediction useful for early identification of students who may require additional academic support.
 
-- Number of records
-- Data types
-- Missing values
-- Duplicate records
-- Target distribution
+---
 
-No data-row values were modified.
+## 📊 Dataset
 
-## 5. Leakage Prevention
+The project uses the **Predict Students' Dropout and Academic Success** dataset from the UCI Machine Learning Repository.
 
-The prediction is intended to be made at student enrollment time.
+### Dataset Statistics
 
-Therefore, the following first- and second-semester performance variables were excluded:
+- **Total records:** 4,424
+- **Total columns:** 37
+- **Target column:** `Target`
+- **Classes:** Dropout, Enrolled, Graduate
+- **Missing values:** 0
+- **Duplicate rows:** 0
+
+### Target Distribution
+
+| Outcome | Number of Students | Percentage |
+|---|---:|---:|
+| Graduate | 2,209 | 49.93% |
+| Dropout | 1,421 | 32.12% |
+| Enrolled | 794 | 17.95% |
+
+### Dataset Source
+
+UCI Machine Learning Repository:
+
+**Predict Students' Dropout and Academic Success**
+
+https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success
+
+---
+
+## ⚠️ Data Leakage Prevention
+
+A major consideration in this project is **temporal data leakage**.
+
+The original dataset contains student performance information from the first and second semesters. These variables would not be available at the time of enrollment.
+
+Therefore, the following semester-performance features were excluded:
+
+### First Semester
 
 - Curricular units 1st sem (credited)
 - Curricular units 1st sem (enrolled)
@@ -58,6 +81,9 @@ Therefore, the following first- and second-semester performance variables were e
 - Curricular units 1st sem (approved)
 - Curricular units 1st sem (grade)
 - Curricular units 1st sem (without evaluations)
+
+### Second Semester
+
 - Curricular units 2nd sem (credited)
 - Curricular units 2nd sem (enrolled)
 - Curricular units 2nd sem (evaluations)
@@ -65,61 +91,46 @@ Therefore, the following first- and second-semester performance variables were e
 - Curricular units 2nd sem (grade)
 - Curricular units 2nd sem (without evaluations)
 
-These variables are unavailable at enrollment time and could introduce temporal data leakage.
+After removing these 12 leakage-prone variables, the model uses **24 enrollment-time predictors**.
 
-## 6. Train/Test Strategy
+This ensures that the prediction task matches the intended real-world scenario: predicting outcomes using information available when a student enrolls.
 
-An 80/20 stratified train/test split was used.
+---
 
-Random seed: 42.
+## 🧠 Machine Learning Workflow
 
-The test set was kept separate from model training and model selection.
+The project follows the following workflow:
 
-## 7. Models
-
-Two models were compared:
-
-1. Logistic Regression
-2. Random Forest
-
-Class weighting was used to help address class imbalance.
-
-## 8. Evaluation
-
-Models were evaluated using:
-
-- Accuracy
-- Macro Precision
-- Macro Recall
-- Macro F1
-- Per-class Precision
-- Per-class Recall
-- Per-class F1
-- Confusion Matrix
-
-Macro F1 was emphasized because the target classes are imbalanced.
-
-## 9. Model Selection
-
-The final model was selected based primarily on Macro F1 and balanced class-level performance rather than accuracy alone.
-
-See:
-
-`outputs/model_comparison.csv`
-
-for the actual results produced by the implementation.
-
-## 10. Feature Interpretation
-
-Feature importance was examined to identify variables that were useful for prediction.
-
-Feature importance represents predictive association and does not prove causation.
-
-## 11. Interactive Demo
-
-A Streamlit application is included for demonstrating predictions using the trained model.
-
-Run:
-
-```bash
-streamlit run app.py
+```text
+Dataset
+   ↓
+Data Validation
+   ↓
+Target Distribution Analysis
+   ↓
+Remove Temporal Leakage Features
+   ↓
+Train/Test Split
+   ↓
+Preprocessing
+   ├── Numerical Features
+   └── Categorical Features
+   ↓
+Model Training
+   ├── Logistic Regression
+   └── Random Forest
+   ↓
+Model Evaluation
+   ├── Accuracy
+   ├── Precision
+   ├── Recall
+   ├── Macro F1
+   └── Confusion Matrix
+   ↓
+Model Comparison
+   ↓
+Final Model Selection
+   ↓
+Model Saving
+   ↓
+Streamlit Deployment
