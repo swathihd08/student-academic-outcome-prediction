@@ -16,7 +16,7 @@ The project uses machine learning with a leakage-safe preprocessing and evaluati
 
 The application is deployed using **Streamlit Community Cloud**.
 
-Evaluators can directly open the link, enter student information available at enrollment time, and obtain a predicted academic outcome along with prediction probabilities.
+You can directly open the link, enter student information available at enrollment time, and obtain a predicted academic outcome along with prediction probabilities.
 
 ---
 
